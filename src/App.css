@@ -10,10 +10,11 @@
 body {
   overflow-x: hidden; 
   overflow-y: auto;
+  background-color: #f0f0f0; /* Color de base neutro */
 }
 
 /* =========================================
-   ANIMACIONES DE CARTA (SOLO ESTO QUEDA ARRIBA)
+   ANIMACIONES DE CARTA (LÓGICA DE STACK)
    ========================================= */
 .card-active { transform: translateY(0) scale(1); opacity: 1; z-index: 10; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease, z-index 0s 0s; }
 .card-next { transform: translateY(20px) scale(0.95); opacity: 0.7; z-index: 5; }
@@ -36,19 +37,15 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: background-color 1s ease, color 1s ease; /* Transición de color suave */
-  
-  /* NUEVO: Fade in al cargar el sitio por primera vez */
+  transition: background-color 1s ease, color 1s ease;
   animation: pageMountFade 1.2s ease-out forwards;
 }
 
-/* Capa semitransparente con blur */
 .bg-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(255, 255, 255, 0.4); 
-  backdrop-filter: blur(8px); 
-  transition: backdrop-filter 1s ease; /* Blur suave */
+  background: rgba(255, 255, 255, 0.35); /* Capa muy clara para que luzca el fondo */
+  backdrop-filter: blur(10px); 
   z-index: 0;
 }
 
@@ -58,20 +55,20 @@ body {
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
-  padding: 3rem 1rem 1rem 1rem;
+  padding: 3rem 1.5rem;
   flex: 1; 
   display: flex;
   flex-direction: column;
 }
 
 /* =========================================
-   HEADER & NAVIGATION TABS (SÚPER SUTILES)
+   HEADER & NAVIGATION (SÚPER SUTIL Y MÁS GRANDE)
    ========================================= */
 .tabs-header {
   display: flex;
   justify-content: center; 
-  gap: 3rem; 
-  margin-bottom: 3rem;
+  gap: 3.5rem; 
+  margin-bottom: 4rem;
 }
 
 .tab-button {
@@ -79,21 +76,20 @@ body {
   cursor: pointer;
   background: none;
   border: none;
-  font-size: 0.75rem;
+  font-size: 0.95rem; /* Letra ampliada */
   text-transform: uppercase;
-  letter-spacing: 3px; 
+  letter-spacing: 4px; /* Más aireado */
   font-weight: 300;
   color: var(--text-color);
-  opacity: 0.25; 
+  opacity: 0.2; /* Casi invisible para no distraer */
   position: relative;
-  transition: all 0.4s ease, transform 0.2s ease;
+  transition: all 0.5s ease;
   text-decoration: none;
-  display: inline-block;
 }
 
 .tab-button:hover {
   opacity: 0.6;
-  transform: translateY(-1px); /* Pequeño movimiento al hover */
+  transform: translateY(-1px);
 }
 
 .tab-button.active {
@@ -104,7 +100,7 @@ body {
 .tab-button.active::after {
   content: '';
   position: absolute;
-  bottom: -4px;
+  bottom: -6px;
   left: 0;
   width: 100%;
   height: 1px;
@@ -113,7 +109,7 @@ body {
 }
 
 /* =========================================
-   LAYOUT DE LA OBRA Y ANIMACIONES ESCALONADAS
+   ARTWORK DISPLAY & STAGGERED ANIMATION
    ========================================= */
 .tab-content {
   flex: 1;
@@ -121,58 +117,48 @@ body {
   justify-content: center;
 }
 
-/* NUEVO: El parent .tab-content SOLO hace fade in global */
 .smooth-entry {
-  animation: parentFadeIn 0.5s ease-out forwards;
+  animation: parentFadeIn 0.6s ease-out forwards;
 }
 
 .artwork-display {
   display: flex;
   flex-direction: column; 
-  gap: 2.5rem; 
+  gap: 3rem; 
   align-items: center;
   width: 100%;
-  padding-bottom: 2rem;
 }
 
-/* NUEVO: Definimos la animación escalonada (Staggered) */
-/* Todos los hijos directos de artwork-display están ocultos al principio */
+/* Animación escalonada para los hijos */
 .artwork-display > * {
   opacity: 0;
-  animation-name: elementSlideFadeIn;
-  animation-duration: 0.8s;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  animation-fill-mode: forwards;
+  animation: elementSlideFadeIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Asignamos delays a cada elemento para el efecto escalera */
-.artwork-title-container {
-  animation-delay: 0.1s; /* Entra primero */
-}
-
-.image-stack-container {
-  animation-delay: 0.2s; /* Entra segundo */
-}
-
-.artwork-text {
-  animation-delay: 0.3s; /* Entra tercero */
-}
+.artwork-title-container { animation-delay: 0.15s; text-align: center; }
+.image-stack-container { animation-delay: 0.3s; }
+.artwork-text { animation-delay: 0.45s; }
 
 /* =========================================
-   TÍTULO ARRIBA
+   TÍTULO ARRIBA (AMPLIADO)
    ========================================= */
-.artwork-title-container { text-align: center; width: 100%; }
-.artwork-title-container h2 { font-size: 2.2rem; font-weight: 300; letter-spacing: -0.5px; color: var(--text-color); }
+.artwork-title-container h2 {
+  font-size: 3rem; /* Tamaño tipo poster */
+  font-weight: 300; 
+  letter-spacing: -1px;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
 
 /* =========================================
-   IMAGE STACK (GALERÍA CLICKEABLE)
+   IMAGE STACK (GALERÍA)
    ========================================= */
 .image-stack-container {
   position: relative;
   width: 100%;
-  max-width: 500px; 
-  height: 55vh; 
-  min-height: 400px;
+  max-width: 550px; 
+  height: 60vh; 
+  min-height: 450px;
   cursor: pointer; 
   display: flex;
   justify-content: center;
@@ -182,82 +168,89 @@ body {
   position: absolute; 
   top: 0;
   width: 100%;
-  height: calc(100% - 40px);
-  border-radius: 12px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+  height: calc(100% - 50px);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
   object-fit: cover;
-  /* Animación fluida de cartas */
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease, z-index 0s 0.2s;
 }
 
 .image-stack-container:hover .card-active {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.2); 
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.18);
 }
 
 .image-counter {
   position: absolute;
   bottom: 0;
-  right: 15px;
+  right: 20px;
   color: var(--text-color);
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  font-weight: 600;
-  opacity: 0.5;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  font-weight: 500;
+  opacity: 0.4;
   z-index: 20; 
-  pointer-events: none;
 }
 
 /* =========================================
-   TEXT STYLING (DESCRIPCIÓN ABAJO)
+   TEXT STYLING (DESCRIPCIÓN AMPLIADA)
    ========================================= */
-.artwork-text { text-align: center; max-width: 700px; }
-.artwork-text p { font-size: 1.05rem; line-height: 1.8; opacity: 0.85; font-weight: 400; white-space: pre-wrap; text-shadow: 0 1px 3px rgba(255,255,255,0.5); }
+.artwork-text {
+  text-align: center; 
+  max-width: 750px; 
+  margin-top: 2rem;
+}
+
+.artwork-text p {
+  font-size: 1.35rem; /* Mucho más grande y legible */
+  line-height: 1.9;    /* Espacio entre líneas elegante */
+  opacity: 0.9;
+  font-weight: 300; 
+  white-space: pre-wrap; 
+  text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+}
 
 /* =========================================
-   FOOTER (AUTORA Y CONTACTO)
+   FOOTER (SUTIL)
    ========================================= */
 .main-footer {
-  margin-top: auto; 
-  padding: 3rem 0 1rem 0;
+  margin-top: 6rem; 
+  padding: 2rem 0;
   text-align: center;
-  transition: opacity 0.3s ease;
 }
 
-.artist-name { font-weight: 300; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; }
-.instagram-link { color: inherit; text-decoration: none; transition: opacity 0.3s ease; font-weight: 600; }
-.instagram-link:hover { opacity: 1; text-decoration: underline; }
+.artist-name {
+  font-weight: 300;
+  font-size: 0.95rem; 
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.5; 
+}
+
+.instagram-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.instagram-link:hover {
+  text-decoration: underline;
+}
 
 /* =========================================
-   KEYFRAMES (DEFINICIÓN DE ANIMACIONES)
+   KEYFRAMES
    ========================================= */
-
-/* 1. Animación global de carga inicial del sitio */
 @keyframes pageMountFade {
-  0% { 
-    opacity: 0; 
-    filter: brightness(0.8);
-  }
-  100% { 
-    opacity: 1; 
-    filter: brightness(1);
-  }
+  0% { opacity: 0; filter: blur(5px); }
+  100% { opacity: 1; filter: blur(0); }
 }
 
-/* 2. Animación global del contenedor principal al cambiar de ruta (solo fade) */
 @keyframes parentFadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-/* 3. Animación escalonada para elementos internos (Slide Up + Fade In) */
 @keyframes elementSlideFadeIn {
-  0% { 
-    opacity: 0; 
-    transform: translateY(15px); 
-  }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
+  0% { opacity: 0; transform: translateY(25px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
