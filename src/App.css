@@ -1,6 +1,3 @@
-/* =========================================
-   RESET & BASIC STYLES
-   ========================================= */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,249 +5,144 @@
 }
 
 body {
-  overflow-x: hidden; 
-  overflow-y: auto;
-  background-color: #f0f0f0; /* Color de base neutro */
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  color: #000000;
+  background-color: #f0f0f0;
 }
 
-/* =========================================
-   ANIMACIONES DE CARTA (LÓGICA DE STACK)
-   ========================================= */
-.card-active { transform: translateY(0) scale(1); opacity: 1; z-index: 10; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease, z-index 0s 0s; }
-.card-next { transform: translateY(20px) scale(0.95); opacity: 0.7; z-index: 5; }
-.card-prev { transform: translateY(40px) scale(0.9); opacity: 0.4; z-index: 1; }
-.card-hidden { transform: translateY(40px) scale(0.9); opacity: 0; z-index: 0; }
-
-/* =========================================
-   MAIN CONTAINER & BACKGROUND
-   ========================================= */
 .app-container {
   min-height: 100vh;
   width: 100vw;
-  background-color: var(--bg-color);
-  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; 
-  color: var(--text-color);
-  font-family: 'Inter', sans-serif;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: background-color 1s ease, color 1s ease;
-  animation: pageMountFade 1.2s ease-out forwards;
+  transition: background-image 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bg-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(255, 255, 255, 0.35); /* Capa muy clara para que luzca el fondo */
-  backdrop-filter: blur(10px); 
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
   z-index: 0;
 }
 
 .content-wrapper {
   position: relative;
-  z-index: 1; 
+  z-index: 1;
   max-width: 900px;
-  width: 100%;
   margin: 0 auto;
-  padding: 3rem 1.5rem;
-  flex: 1; 
+  padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-/* =========================================
-   HEADER & NAVIGATION (SÚPER SUTIL Y MÁS GRANDE)
-   ========================================= */
+/* NAVEGACIÓN SUPERIOR */
 .tabs-header {
   display: flex;
-  justify-content: center; 
-  gap: 3.5rem; 
-  margin-bottom: 4rem;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .tab-button {
-  padding: 0.5rem 0;
-  cursor: pointer;
   background: none;
   border: none;
-  font-size: 0.95rem; /* Letra ampliada */
-  text-transform: uppercase;
-  letter-spacing: 4px; /* Más aireado */
-  font-weight: 300;
-  color: var(--text-color);
-  opacity: 0.2; /* Casi invisible para no distraer */
-  position: relative;
-  transition: all 0.5s ease;
-  text-decoration: none;
-}
-
-.tab-button:hover {
-  opacity: 0.6;
-  transform: translateY(-1px);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #000000;
+  opacity: 0.2;
+  cursor: pointer;
+  transition: opacity 0.4s ease;
 }
 
 .tab-button.active {
-  opacity: 0.85; 
-  font-weight: 600;
+  opacity: 1;
+  border-bottom: 2px solid #000;
 }
 
-.tab-button.active::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: var(--text-color);
-  opacity: 0.3; 
-}
-
-/* =========================================
-   ARTWORK DISPLAY & STAGGERED ANIMATION
-   ========================================= */
-.tab-content {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.smooth-entry {
-  animation: parentFadeIn 0.6s ease-out forwards;
-}
-
-.artwork-display {
-  display: flex;
-  flex-direction: column; 
-  gap: 3rem; 
-  align-items: center;
-  width: 100%;
-}
-
-/* Animación escalonada para los hijos */
-.artwork-display > * {
-  opacity: 0;
-  animation: elementSlideFadeIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.artwork-title-container { animation-delay: 0.15s; text-align: center; }
-.image-stack-container { animation-delay: 0.3s; }
-.artwork-text { animation-delay: 0.45s; }
-
-/* =========================================
-   TÍTULO ARRIBA (AMPLIADO)
-   ========================================= */
+/* TÍTULO EXTRA NEGRO */
 .artwork-title-container h2 {
-  font-size: 3rem; /* Tamaño tipo poster */
-  font-weight: 300; 
+  font-size: 2.5rem;
+  font-weight: 900;
   letter-spacing: -1px;
-  color: var(--text-color);
-  margin-bottom: 1rem;
-}
-
-/* =========================================
-   IMAGE STACK (GALERÍA)
-   ========================================= */
-.image-stack-container {
-  position: relative;
-  width: 100%;
-  max-width: 550px; 
-  height: 60vh; 
-  min-height: 450px;
-  cursor: pointer; 
-  display: flex;
-  justify-content: center;
-}
-
-.artwork-image-card {
-  position: absolute; 
-  top: 0;
-  width: 100%;
-  height: calc(100% - 50px);
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease, z-index 0s 0.2s;
-}
-
-.image-stack-container:hover .card-active {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.18);
-}
-
-.image-counter {
-  position: absolute;
-  bottom: 0;
-  right: 20px;
-  color: var(--text-color);
-  font-size: 0.85rem;
-  letter-spacing: 2px;
-  font-weight: 500;
-  opacity: 0.4;
-  z-index: 20; 
-}
-
-/* =========================================
-   TEXT STYLING (DESCRIPCIÓN AMPLIADA)
-   ========================================= */
-.artwork-text {
-  text-align: center; 
-  max-width: 750px; 
-  margin-top: 2rem;
-}
-
-.artwork-text p {
-  font-size: 1.35rem; /* Mucho más grande y legible */
-  line-height: 1.9;    /* Espacio entre líneas elegante */
-  opacity: 0.9;
-  font-weight: 300; 
-  white-space: pre-wrap; 
-  text-shadow: 0 1px 2px rgba(255,255,255,0.4);
-}
-
-/* =========================================
-   FOOTER (SUTIL)
-   ========================================= */
-.main-footer {
-  margin-top: 6rem; 
-  padding: 2rem 0;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
+/* CARRUSEL MINI SIN BOTONES */
+.carousel-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.carousel-window {
+  width: 300px; /* Tamaño chico y elegante */
+  height: 300px;
+  overflow: hidden;
+  border-radius: 2px; /* Bordes rectos tipo cuadro */
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.carousel-slide {
+  min-width: 300px;
+  height: 300px;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* CUERPO DE TEXTO GRANDE Y NEGRO */
+.artwork-text {
+  max-width: 650px;
+  text-align: center;
+}
+
+.artwork-text p {
+  font-size: 1.4rem; /* Gran tamaño para impacto */
+  line-height: 1.7;
+  font-weight: 800; /* Letra bien gruesa y negra */
+  color: #000000;
+  white-space: pre-line; /* Clave para respetar los párrafos del texto anterior */
+  text-align: center;
+  max-width: 700px;
+}
+
+.main-footer {
+  margin-top: 4rem;
+}
+
 .artist-name {
-  font-weight: 300;
-  font-size: 0.95rem; 
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  opacity: 0.5; 
+  opacity: 0.5;
 }
 
-.instagram-link {
-  color: inherit;
-  text-decoration: none;
-  font-weight: 600;
+/* ANIMACIÓN DE ENTRADA */
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
 }
 
-.instagram-link:hover {
-  text-decoration: underline;
-}
-
-/* =========================================
-   KEYFRAMES
-   ========================================= */
-@keyframes pageMountFade {
-  0% { opacity: 0; filter: blur(5px); }
-  100% { opacity: 1; filter: blur(0); }
-}
-
-@keyframes parentFadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes elementSlideFadeIn {
-  0% { opacity: 0; transform: translateY(25px); }
-  100% { opacity: 1; transform: translateY(0); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
